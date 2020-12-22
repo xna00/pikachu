@@ -1,5 +1,5 @@
-const styleString =`
-.nose {
+const styleString =
+`.nose {
   position: absolute;
   border: 12px solid transparent;
   top: 100px;
@@ -101,7 +101,8 @@ const styleString =`
   border-radius: 50%;
   background: #FF485F;
 
-}
+} 
+
 .cheek {
   border: 3px solid black;
   width: 88px;
@@ -113,9 +114,11 @@ const styleString =`
   border-radius: 50%;
   background: #f00;
 }
+
 .cheek.left {
   transform: translateX(-130px);
 }
+
 .cheek.right {
   transform: translateX(130px);
 }`
@@ -130,8 +133,13 @@ let delay = 40
 let h;
 const handle = () => {
     let s = styleString[n]
-    styleElement.innerHTML += styleString[n]
-    landIn.innerHTML += styleString[n]
+    styleElement.innerHTML += s
+    const span = document.createElement('span')
+    span.innerText = s
+    span.style.animation = `land-in ${delay * 50}ms ease-out forwards`
+    if(styleString.indexOf())
+    landIn.appendChild(span)
+    // landIn.innerHTML += styleString[n]
     // console.log(styleString[n]);
     if (playing) {
         n++
@@ -158,4 +166,6 @@ fast.onclick = () => {
 }
 end.onclick = () => {
     n = styleString.length
+    styleElement.innerHTML = styleString
+    landIn.innerHTML = styleString
 }

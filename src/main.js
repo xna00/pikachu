@@ -1,5 +1,5 @@
-const styleString =
-    `.nose {
+const styleString =`
+.nose {
   position: absolute;
   border: 12px solid transparent;
   top: 100px;
@@ -122,20 +122,23 @@ const styleString =
 
 let n = 0;
 const styleElement = document.querySelector('#style')
+const landIn = document.querySelector('.land-in')
 console.log(styleElement);
+console.log(landIn)
 let playing = true
 let delay = 40
 let h;
 const handle = () => {
     let s = styleString[n]
-    styleElement.innerText = styleString.substring(0, n)
-    console.log(styleString[n]);
+    styleElement.innerHTML += styleString[n]
+    landIn.innerHTML += styleString[n]
+    // console.log(styleString[n]);
     if (playing) {
         n++
     }
     h = setTimeout(handle, delay)
     n === styleString.length + 1 && clearTimeout(h)
-    styleElement.scrollTo(0, 9999)
+    landIn.scrollTo(0, 9999)
 }
 handle()
 play.onclick = () => {
@@ -148,7 +151,7 @@ slow.onclick = () => {
     delay = 100
 }
 normal.onclick = () => {
-    delay = 50
+    delay = 60
 }
 fast.onclick = () => {
     delay = 10

@@ -19,17 +19,12 @@ main {
   /* overflow-y: auto; */
 }
 .land-in {
-  /* display: flex; */
-  /* flex-wrap: wrap; */
   line-height: 1.8;
-  /* color: white; */
-  /* font-family: Lora, serif; */
-  /* white-space: pre; */
   height: 100%;
   width: 100%;
   overflow-y: auto;
   padding: 10px;
-
+  font-size: 1.2em;
   
 }
 

@@ -1,5 +1,5 @@
 const styleString =
-`.nose {
+  `.nose {
   position: absolute;
   border: 12px solid transparent;
   top: 100px;
@@ -52,7 +52,7 @@ const styleString =
   border: none;
 }
 
-.mouth>.toplip {
+.mouth > .toplip {
   position: absolute;
   width: 80px;
   height: 25px;
@@ -66,19 +66,19 @@ const styleString =
   overflow: hidden;
 }
 
-.mouth>.toplip.left {
+.mouth > .toplip.left {
   border-bottom-left-radius: 100%;
   transform: translateX(-40px) rotateZ(-25deg);
   border-right: none;
 }
 
-.mouth>.toplip.right {
+.mouth > .toplip.right {
   transform: translateX(40px) rotateZ(25deg);
   border-bottom-right-radius: 100%;
   border-left: none;
 }
 
-.mouth>.bottomlip {
+.mouth > .bottomlip {
   border: 3px solid black;
   height: 300px;
   width: 120px;
@@ -91,7 +91,7 @@ const styleString =
   overflow: hidden;
 }
 
-.mouth>.bottomlip>.tongue {
+.mouth > .bottomlip > .tongue {
   position: absolute;
   width: 200px;
   height: 200px;
@@ -131,41 +131,112 @@ console.log(landIn)
 let playing = true
 let delay = 40
 let h;
-const handle = () => {
-    let s = styleString[n]
-    styleElement.innerHTML += s
-    const span = document.createElement('span')
-    span.innerText = s
-    span.style.animation = `land-in ${delay * 50}ms ease-out forwards`
-    if(styleString.indexOf())
-    landIn.appendChild(span)
-    // landIn.innerHTML += styleString[n]
-    // console.log(styleString[n]);
-    if (playing) {
-        n++
+let color = '#d7ba7d'
+let valueType = 'n'
+const colorMap = {
+  selector: '#d7ba7d',
+  property: '#9cdcfe',
+  valueN:'#b5cea8',
+  valueNON:'#ce9178', 
+  value:'#ce9178'
+
+}
+let current = 'selector'
+let test = ()=>{
+  const fragment = new DocumentFragment()
+  for(s of styleString){
+    if (s === '{') {
+      current = 'property'
+    } else if (s === ':') {
+      current = 'value'
+    } else if (s === ';') {
+      current = 'property'
+    } else if (s === '}') {
+      current = 'selector'
     }
-    h = setTimeout(handle, delay)
-    n === styleString.length + 1 && clearTimeout(h)
-    landIn.scrollTo(0, 9999)
+    if(current === 'value') {
+      if('-0123456789'.includes(s)){
+        current = 'valueN'
+      }else {
+        current = 'valueNON'
+      }
+    }
+    if((current === 'valueN' || current=== 'valueNON') && s=== ' ') current = 'value'
+    const span = document.createElement('span')
+    if (['{', '}', ':', ';'].includes(s)) {
+      span.style.color = 'white'
+    } else {
+      span.style.color = colorMap[current]
+    } 
+    s && (span.innerText = s)
+    fragment.appendChild(span)
+  }
+  current = 'selector'
+  return fragment
+}
+const handle = () => {
+  let s = styleString[n]
+  if (s === '{') {
+    current = 'property'
+  } else if (s === ':') {
+    current = 'value'
+  } else if (s === ';') {
+    current = 'property'
+  } else if (s === '}') {
+    current = 'selector'
+  }
+  if(current === 'value') {
+    // console.log(s)
+    if('-0123456789'.includes(s)){
+      current = 'valueN'
+      // console.log('N')
+    }else {
+      current = 'valueNON'
+    }
+  }
+  if((current === 'valueN' || current=== 'valueNON') && s=== ' ') current = 'value'
+  styleElement.innerHTML += s
+  const span = document.createElement('span')
+  s && (span.innerText = s)
+  span.style.animation = `land-in ${delay * 50}ms ease-out forwards`
+  if (['{', '}', ':', ';'].includes(s)) {
+    span.style.color = 'white'
+  } else {
+    span.style.color = colorMap[current]
+  }
+  if (styleString.indexOf())
+    landIn.appendChild(span)
+  // landIn.innerHTML += styleString[n]
+  // console.log(styleString[n]);
+    n++
+  if (!playing) {
+    clearTimeout(h)
+    return
+  } 
+  h = setTimeout(handle, delay)
+  n === styleString.length + 1 && clearTimeout(h)
+  landIn.scrollTo(0, 9999)
 }
 handle()
 play.onclick = () => {
-    playing = true
+  playing = true
+  n < styleString.length ? handle() : location.reload()
 }
 pause.onclick = () => {
-    playing = false
+  playing = false
 }
 slow.onclick = () => {
-    delay = 100
+  delay = 80
 }
 normal.onclick = () => {
-    delay = 60
+  delay = 40
 }
 fast.onclick = () => {
-    delay = 10
+  delay = 10
 }
 end.onclick = () => {
-    n = styleString.length
-    styleElement.innerHTML = styleString
-    landIn.innerHTML = styleString
+  // delay = 0
+  n = styleString.length
+  styleElement.innerHTML = styleString
+  landIn.appendChild(test())
 }
